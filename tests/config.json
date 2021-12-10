@@ -1,0 +1,4 @@
+{
+  "command": "java -jar ./build/libs/ScriptEngine-1.0-SNAPSHOT.jar {inputFile}",
+  "testDir": "./tests"
+}

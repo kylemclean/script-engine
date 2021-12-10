@@ -1,0 +1,6 @@
+var obj = {"game": 5};
+print(obj["game"]);
+obj["game"] = 7;
+print(obj["game"]);
+obj["game"] = false;
+print(obj["game"]);

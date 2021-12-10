@@ -1,0 +1,8 @@
+# Integer subtraction
+print(9 - 10);
+print(11-10);
+
+# Float subtraction
+print(3.5 - 2.2);
+print(1.21 - 6);
+print(58 - 11.0);

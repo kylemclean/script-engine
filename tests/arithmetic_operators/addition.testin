@@ -1,0 +1,8 @@
+# Integer addition
+print(9 + 10);
+print(10+11);
+
+# Float addition
+print(3.5 + 2.2);
+print(1.21 + 6);
+print(7 + 9.1);
