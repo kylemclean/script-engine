@@ -1,6 +1,7 @@
 package io.github.kylemclean.scriptengine.interpreter.values
 
 import io.github.kylemclean.scriptengine.ast.ParamList
+import io.github.kylemclean.scriptengine.interpreter.Arguments
 
 class ArrayValue(elements: List<Value> = emptyList()) : Value(arrayClass),
     IterableValue, IndexableValue, SliceableValue, SizedValue {
@@ -9,9 +10,8 @@ class ArrayValue(elements: List<Value> = emptyList()) : Value(arrayClass),
 
         init {
             val constructor = object : NativeFunctionValue(ParamList("iterable")) {
-                override fun executeNativeFunction(arguments: List<Value>): ArrayValue {
-                    if (arguments.size != 1)
-                        throw IllegalArgumentException("wrong number of arguments")
+                override fun executeNativeFunction(arguments: Arguments): ArrayValue {
+                    arguments.requireSize(1)
                     val iterable = arguments[0]
                     require(iterable is IterableValue) { "iterable is not an IterableValue" }
                     return ArrayValue(iterable.toList())

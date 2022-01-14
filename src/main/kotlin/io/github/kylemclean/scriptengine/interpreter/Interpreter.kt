@@ -37,7 +37,8 @@ class Interpreter private constructor() {
         val globalScope = Scope()
 
         printFunction = object : NativeFunctionValue(ParamList("value")) {
-            override fun executeNativeFunction(arguments: List<Value>): Value {
+            override fun executeNativeFunction(arguments: Arguments): Value {
+                arguments.requireSize(1)
                 println(arguments[0].str())
                 return NullValue
             }
@@ -45,7 +46,8 @@ class Interpreter private constructor() {
         globalScope.putSymbol(Symbol("print", printFunction))
 
         lengthFunction = object : NativeFunctionValue(ParamList("value")) {
-            override fun executeNativeFunction(arguments: List<Value>): Value {
+            override fun executeNativeFunction(arguments: Arguments): Value {
+                arguments.requireSize(1)
                 val value = arguments[0]
                 require(value is SizedValue) { "value is not a SizedValue" }
                 return IntegerValue(value.length())
@@ -54,34 +56,34 @@ class Interpreter private constructor() {
         globalScope.putSymbol(Symbol("length", lengthFunction))
 
         mapFunction = object : NativeFunctionValue(ParamList("func", "iterable")) {
-            override fun executeNativeFunction(arguments: List<Value>): Value {
-                val (func, iterable) = arguments
+            override fun executeNativeFunction(arguments: Arguments): Value {
+                arguments.requireSize(2)
+                val (func, iterable) = arguments.values
                 require(func is FunctionValue) { "func is not a FunctionValue" }
                 require(iterable is IterableValue) { "iterable is not an IterableValue" }
-                val mappedValues = iterable.map { call(func, listOf(it)) }
+                val mappedValues = iterable.map { call(func, Arguments(listOf(it))) }
                 return ArrayValue(mappedValues)
             }
         }
         globalScope.putSymbol(Symbol("map", mapFunction))
 
         filterFunction = object : NativeFunctionValue(ParamList("predicate", "iterable")) {
-            override fun executeNativeFunction(arguments: List<Value>): Value {
-                val (predicate, iterable) = arguments
+            override fun executeNativeFunction(arguments: Arguments): Value {
+                arguments.requireSize(2)
+                val (predicate, iterable) = arguments.values
                 require(predicate is FunctionValue) { "predicate is not a FunctionValue" }
                 require(iterable is IterableValue) { "iterable is not an IterableValue" }
-                val filteredValues = iterable.filter { (call(predicate, listOf(it)) as BooleanValue).value }
+                val filteredValues = iterable.filter { (call(predicate, Arguments(listOf(it))) as BooleanValue).value }
                 return ArrayValue(filteredValues)
             }
         }
         globalScope.putSymbol(Symbol("filter", filterFunction))
 
         reduceFunction = object : NativeFunctionValue(ParamList("func", "iterable", "initializer")) {
-            override fun executeNativeFunction(arguments: List<Value>): Value {
-                if (arguments.size < 2 || arguments.size > 3)
-                    throw IllegalArgumentException("wrong number of arguments")
-                val func = arguments[0]
-                val iterable = arguments[1]
-                val initializer: Value? = if (arguments.size == 3) arguments[2] else null
+            override fun executeNativeFunction(arguments: Arguments): Value {
+                arguments.requireSize(2, 3)
+                val (func, iterable) = arguments.values
+                val initializer: Value? = if (arguments.values.size == 3) arguments[2] else null
                 require(func is FunctionValue) { "func is not a FunctionValue" }
                 require(iterable is IterableValue) { "iterable is not an IterableValue" }
 
@@ -89,7 +91,7 @@ class Interpreter private constructor() {
                     iterable.toList()
                 else
                     listOf(initializer) + iterable.toList()
-                return items.reduce { acc, value -> call(func, listOf(acc, value)) }
+                return items.reduce { acc, value -> call(func, Arguments(listOf(acc, value))) }
             }
         }
         globalScope.putSymbol(Symbol("reduce", reduceFunction))
@@ -98,12 +100,11 @@ class Interpreter private constructor() {
             "(x, y) -> x + y"
         )!!.evaluate()
         sumFunction = object : NativeFunctionValue(ParamList("iterable")) {
-            override fun executeNativeFunction(arguments: List<Value>): Value {
-                if (arguments.size != 1)
-                    throw IllegalArgumentException("wrong number of arguments")
+            override fun executeNativeFunction(arguments: Arguments): Value {
+                arguments.requireSize(1)
                 val iterable = arguments[0]
                 require(iterable is IterableValue) { "iterable is not an IterableValue" }
-                return call(reduceFunction, listOf(addFunction, iterable))
+                return call(reduceFunction, Arguments(listOf(addFunction, iterable)))
             }
         }
         globalScope.putSymbol(Symbol("sum", sumFunction))
@@ -116,21 +117,21 @@ class Interpreter private constructor() {
         )!!.evaluate()
         val makeMinMaxFunctionValue: (FunctionValue) -> FunctionValue = { reducer: FunctionValue ->
             object : NativeFunctionValue(ParamList("value", "y")) {
-                override fun executeNativeFunction(arguments: List<Value>): Value {
-                    return when (arguments.size) {
+                override fun executeNativeFunction(arguments: Arguments): Value {
+                    return when (arguments.values.size) {
                         1 -> {
                             val value = arguments[0]
                             require(value is IterableValue) { "value is not an IterableValue" }
                             require(value is SizedValue) { " value is not a SizedValue" }
-                            val length = call(lengthFunction, listOf(value)) as IntegerValue
+                            val length = call(lengthFunction, Arguments(listOf(value))) as IntegerValue
                             return when (length.value) {
                                 0 -> throw IllegalArgumentException("value is empty")
                                 1 -> value.first()
-                                else -> call(reduceFunction, listOf(reducer, value))
+                                else -> call(reduceFunction, Arguments(listOf(reducer, value)))
                             }
                         }
                         2 -> call(reducer, arguments)
-                        else -> call(this, listOf(ArrayValue(arguments)))
+                        else -> call(this, Arguments(listOf(ArrayValue(arguments.values))))
                     }
                 }
             }
@@ -141,10 +142,9 @@ class Interpreter private constructor() {
         globalScope.putSymbol(Symbol("max", maxFunction))
 
         containsFunction = object : NativeFunctionValue(ParamList("needle", "haystack")) {
-            override fun executeNativeFunction(arguments: List<Value>): Value {
-                if (arguments.size != 2)
-                    throw IllegalArgumentException("wrong number of arguments")
-                val (needle, haystack) = arguments
+            override fun executeNativeFunction(arguments: Arguments): Value {
+                arguments.requireSize(2)
+                val (needle, haystack) = arguments.values
                 return when (haystack) {
                     is ContainerValue -> return haystack.contains(needle)
                     is IterableValue -> BooleanValue.of(haystack.any { it == needle })
@@ -155,10 +155,9 @@ class Interpreter private constructor() {
         globalScope.putSymbol(Symbol("contains", containsFunction))
 
         exitFunction = object : NativeFunctionValue(ParamList("exitCode")) {
-            override fun executeNativeFunction(arguments: List<Value>): Value {
-                if (arguments.size > 1)
-                    throw IllegalArgumentException("wrong number of arguments")
-                val exitCode = if (arguments.size == 1) arguments[0] else IntegerValue(0)
+            override fun executeNativeFunction(arguments: Arguments): Value {
+                arguments.requireSize(0, 1)
+                val exitCode = if (arguments.values.size == 1) arguments[0] else IntegerValue(0)
                 require(exitCode is IntegerValue) { "exitCode is not an IntegerValue" }
                 exitProcess(exitCode.value)
             }
@@ -170,9 +169,8 @@ class Interpreter private constructor() {
         globalScope.putSymbol(Symbol("exit", exitFunction))
 
         typeFunction = object : NativeFunctionValue(ParamList("value")) {
-            override fun executeNativeFunction(arguments: List<Value>): Value {
-                if (arguments.size != 1)
-                    throw IllegalArgumentException("wrong number of arguments")
+            override fun executeNativeFunction(arguments: Arguments): Value {
+                arguments.requireSize(1)
                 val value = arguments[0]
                 return value.`class`
             }
@@ -236,7 +234,7 @@ class Interpreter private constructor() {
         scopes.pop()
     }
 
-    fun call(function: FunctionValue, arguments: List<Value>): Value {
+    fun call(function: FunctionValue, arguments: Arguments): Value {
         val stackFrame = StackFrame(function, arguments)
         callStack.push(stackFrame)
 

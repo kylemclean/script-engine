@@ -1,5 +1,6 @@
 package io.github.kylemclean.scriptengine.ast.expressions
 
+import io.github.kylemclean.scriptengine.interpreter.Arguments
 import io.github.kylemclean.scriptengine.interpreter.Interpreter.Companion.interpreter
 import io.github.kylemclean.scriptengine.interpreter.values.Value
 
@@ -12,6 +13,6 @@ class CallExpression(private val functionExpression: Expression, private val arg
         for (argExpr in arguments) {
             argValues.add(argExpr.evaluate())
         }
-        return interpreter.call(callee, argValues)
+        return interpreter.call(callee, Arguments(argValues))
     }
 }

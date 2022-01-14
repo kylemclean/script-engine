@@ -1,5 +1,6 @@
 package io.github.kylemclean.scriptengine.interpreter.values
 
+import io.github.kylemclean.scriptengine.interpreter.Arguments
 import io.github.kylemclean.scriptengine.interpreter.Interpreter.Companion.interpreter
 
 abstract class Value(`class`: ClassValue?) {
@@ -32,10 +33,10 @@ abstract class Value(`class`: ClassValue?) {
     }
 
     class Property(private val getter: FunctionValue, private val setter: FunctionValue): Member {
-        override fun get(): Value = interpreter.call(getter, emptyList())
+        override fun get(): Value = interpreter.call(getter, Arguments(emptyList()))
 
         override fun set(newValue: Value) {
-            interpreter.call(setter, listOf(newValue))
+            interpreter.call(setter, Arguments(listOf(newValue)))
         }
     }
 

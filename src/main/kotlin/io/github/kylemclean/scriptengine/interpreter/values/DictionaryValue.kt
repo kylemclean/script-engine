@@ -1,6 +1,7 @@
 package io.github.kylemclean.scriptengine.interpreter.values
 
 import io.github.kylemclean.scriptengine.ast.ParamList
+import io.github.kylemclean.scriptengine.interpreter.Arguments
 
 class DictionaryValue : Value(dictionaryClass), IterableValue, SubscriptableValue, SizedValue, ContainerValue {
     companion object {
@@ -8,8 +9,8 @@ class DictionaryValue : Value(dictionaryClass), IterableValue, SubscriptableValu
 
         init {
             val constructor = object : NativeFunctionValue(ParamList()) {
-                override fun executeNativeFunction(arguments: List<Value>): Value {
-                    require(arguments.isEmpty()) { "wrong number of arguments" }
+                override fun executeNativeFunction(arguments: Arguments): Value {
+                    arguments.requireSize(0)
                     return DictionaryValue()
                 }
             }

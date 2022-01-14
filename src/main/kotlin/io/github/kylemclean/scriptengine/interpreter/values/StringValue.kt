@@ -1,6 +1,7 @@
 package io.github.kylemclean.scriptengine.interpreter.values
 
 import io.github.kylemclean.scriptengine.ast.ParamList
+import io.github.kylemclean.scriptengine.interpreter.Arguments
 
 class StringValue(val string: String) : Value(stringClass), IterableValue, IndexableValue, SliceableValue, SizedValue,
     ContainerValue {
@@ -9,9 +10,8 @@ class StringValue(val string: String) : Value(stringClass), IterableValue, Index
 
         init {
             val constructor = object : NativeFunctionValue(ParamList("value")) {
-                override fun executeNativeFunction(arguments: List<Value>): Value {
-                    if (arguments.size != 1)
-                        throw IllegalArgumentException("wrong number of arguments")
+                override fun executeNativeFunction(arguments: Arguments): Value {
+                    arguments.requireSize(1)
                     return when (val value = arguments[0]) {
                         is StringValue -> value
                         else -> StringValue(arguments[0].str())
@@ -24,10 +24,9 @@ class StringValue(val string: String) : Value(stringClass), IterableValue, Index
 
     init {
         setMember("split", Field(object : NativeFunctionValue(ParamList("delimiter")) {
-            override fun executeNativeFunction(arguments: List<Value>): Value {
-                if (arguments.size > 1)
-                    throw IllegalArgumentException("wrong number of arguments")
-                val delimiter = if (arguments.size == 1) {
+            override fun executeNativeFunction(arguments: Arguments): Value {
+                arguments.requireSize(1)
+                val delimiter = if (arguments.values.size == 1) {
                     val arg = arguments[0]
                     require(arg is StringValue) { "delimiter is not a StringValue" }
                     arg.string

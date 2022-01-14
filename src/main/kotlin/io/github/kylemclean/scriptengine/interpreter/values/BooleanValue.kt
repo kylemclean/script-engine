@@ -1,6 +1,7 @@
 package io.github.kylemclean.scriptengine.interpreter.values
 
 import io.github.kylemclean.scriptengine.ast.ParamList
+import io.github.kylemclean.scriptengine.interpreter.Arguments
 
 abstract class BooleanValue private constructor(
     val value: Boolean
@@ -10,9 +11,8 @@ abstract class BooleanValue private constructor(
 
         init {
             val constructor = object : NativeFunctionValue(ParamList("value")) {
-                override fun executeNativeFunction(arguments: List<Value>): Value {
-                    if (arguments.size != 1)
-                        throw IllegalArgumentException("wrong number of arguments")
+                override fun executeNativeFunction(arguments: Arguments): Value {
+                    arguments.requireSize(1)
                     return when (val value = arguments[0]) {
                         is BooleanValue -> value
                         is SizedValue -> of(value.length() > 0)

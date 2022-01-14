@@ -1,6 +1,7 @@
 package io.github.kylemclean.scriptengine.interpreter.values
 
 import io.github.kylemclean.scriptengine.ast.ParamList
+import io.github.kylemclean.scriptengine.interpreter.Arguments
 
 class FloatValue(val value: Float) : NumericValue(floatClass) {
     companion object {
@@ -8,9 +9,8 @@ class FloatValue(val value: Float) : NumericValue(floatClass) {
 
         init {
             val constructor = object : NativeFunctionValue(ParamList("value")) {
-                override fun executeNativeFunction(arguments: List<Value>): Value {
-                    if (arguments.size != 1)
-                        throw IllegalArgumentException("wrong number of arguments")
+                override fun executeNativeFunction(arguments: Arguments): Value {
+                    arguments.requireSize(1)
                     return when (val value = arguments[0]) {
                         is FloatValue -> value
                         is IntegerValue -> FloatValue(value.asFloat())

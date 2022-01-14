@@ -1,6 +1,7 @@
 package io.github.kylemclean.scriptengine.interpreter.values
 
 import io.github.kylemclean.scriptengine.ast.ParamList
+import io.github.kylemclean.scriptengine.interpreter.Arguments
 
 class RangeValue(private val start: Int, private val end: Int, private val step: Int) : Value(rangeClass),
     IterableValue, SizedValue,
@@ -10,10 +11,9 @@ class RangeValue(private val start: Int, private val end: Int, private val step:
 
         init {
             val constructor = object : NativeFunctionValue(ParamList("minInclusive", "maxExclusive", "step")) {
-                override fun executeNativeFunction(arguments: List<Value>): Value {
-                    if (arguments.isEmpty() || arguments.size > 3)
-                        throw IllegalArgumentException("wrong number of arguments")
-                    val minInclusive = if (arguments.size == 1) {
+                override fun executeNativeFunction(arguments: Arguments): Value {
+                    arguments.requireSize(1, 3)
+                    val minInclusive = if (arguments.values.size == 1) {
                         0
                     } else {
                         val arg = arguments[0]
@@ -21,14 +21,14 @@ class RangeValue(private val start: Int, private val end: Int, private val step:
                         arg.value
                     }
                     val maxExclusive = run {
-                        val arg = if (arguments.size == 1)
+                        val arg = if (arguments.values.size == 1)
                             arguments[0]
                         else
                             arguments[1]
                         require(arg is IntegerValue) { "maxExclusive is not an IntegerValue" }
                         arg.value
                     }
-                    val step = if (arguments.size < 3) {
+                    val step = if (arguments.values.size < 3) {
                         1
                     } else {
                         val arg = arguments[2]

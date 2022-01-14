@@ -1,6 +1,7 @@
 package io.github.kylemclean.scriptengine.interpreter.values
 
 import io.github.kylemclean.scriptengine.ast.ParamList
+import io.github.kylemclean.scriptengine.interpreter.Arguments
 import io.github.kylemclean.scriptengine.interpreter.Interpreter.Companion.interpreter
 
 abstract class NativeFunctionValue(paramList: ParamList): FunctionValue(paramList) {
@@ -10,7 +11,7 @@ abstract class NativeFunctionValue(paramList: ParamList): FunctionValue(paramLis
         interpreter.exitScope()
     }
 
-    abstract fun executeNativeFunction(arguments: List<Value>): Value
+    abstract fun executeNativeFunction(arguments: Arguments): Value
 
     override fun str(): String = repr()
 
