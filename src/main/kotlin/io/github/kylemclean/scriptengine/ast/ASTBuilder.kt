@@ -55,7 +55,8 @@ class ASTBuilder : io.github.kylemclean.scriptengine.ScriptEngineBaseVisitor<Any
     override fun visitExpExpr(ctx: ExpExprContext): ArithmeticBinaryOperatorExpression.ExponentiationExpression =
         ArithmeticBinaryOperatorExpression.ExponentiationExpression(
             visit(ctx.expr(0)) as Expression,
-            visit(ctx.expr(1)) as Expression)
+            visit(ctx.expr(1)) as Expression
+        )
 
     override fun visitIntegerLiteralExpr(ctx: IntegerLiteralExprContext): IntegerLiteralExpression {
         return IntegerLiteralExpression(ctx.INT().text.toInt())
@@ -72,9 +73,18 @@ class ASTBuilder : io.github.kylemclean.scriptengine.ScriptEngineBaseVisitor<Any
         val lhsExpression = visit(ctx.expr(0)) as Expression
         val rhsExpression = visit(ctx.expr(1)) as Expression
         return when {
-            ctx.MUL() != null -> ArithmeticBinaryOperatorExpression.MultiplicationExpression(lhsExpression, rhsExpression)
-            ctx.DIV() != null -> ArithmeticBinaryOperatorExpression.FloatDivisionExpression(lhsExpression, rhsExpression)
-            ctx.INT_DIV() != null -> ArithmeticBinaryOperatorExpression.IntegerDivisionExpression(lhsExpression, rhsExpression)
+            ctx.MUL() != null -> ArithmeticBinaryOperatorExpression.MultiplicationExpression(
+                lhsExpression,
+                rhsExpression
+            )
+            ctx.DIV() != null -> ArithmeticBinaryOperatorExpression.FloatDivisionExpression(
+                lhsExpression,
+                rhsExpression
+            )
+            ctx.INT_DIV() != null -> ArithmeticBinaryOperatorExpression.IntegerDivisionExpression(
+                lhsExpression,
+                rhsExpression
+            )
             ctx.REM() != null -> ArithmeticBinaryOperatorExpression.RemainderExpression(lhsExpression, rhsExpression)
             else -> throw IllegalArgumentException("unknown operator")
         }
@@ -152,7 +162,8 @@ class ASTBuilder : io.github.kylemclean.scriptengine.ScriptEngineBaseVisitor<Any
         EqualityOperatorExpression(
             visit(ctx.expr(0)) as Expression,
             visit(ctx.expr(1)) as Expression,
-            ctx.EQ() == null)
+            ctx.EQ() == null
+        )
 
     override fun visitFunctionExpr(ctx: FunctionExprContext): FunctionExpression {
         val body =
@@ -164,7 +175,8 @@ class ASTBuilder : io.github.kylemclean.scriptengine.ScriptEngineBaseVisitor<Any
     }
 
     override fun visitCondExpr(ctx: CondExprContext) = ConditionalExpression(
-            visit(ctx.condition) as Expression, visit(ctx.consequent) as Expression, visit(ctx.alternate) as Expression)
+        visit(ctx.condition) as Expression, visit(ctx.consequent) as Expression, visit(ctx.alternate) as Expression
+    )
 
     override fun visitContainsExpr(ctx: ContainsExprContext): ContainsExpression =
         ContainsExpression(visit(ctx.expr(0)) as Expression, visit(ctx.expr(1)) as Expression)
@@ -187,7 +199,8 @@ class ASTBuilder : io.github.kylemclean.scriptengine.ScriptEngineBaseVisitor<Any
         return ConditionalStatement(
             visit(ctx.expr()) as Expression,
             visit(ctx.consequent) as Statement,
-            if (ctx.alternate != null) visit(ctx.alternate) as Statement else null)
+            if (ctx.alternate != null) visit(ctx.alternate) as Statement else null
+        )
     }
 
     override fun visitForStmt(ctx: ForStmtContext): ForStatement {

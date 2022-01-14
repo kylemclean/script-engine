@@ -4,7 +4,7 @@ import io.github.kylemclean.scriptengine.ast.ParamList
 import io.github.kylemclean.scriptengine.interpreter.Arguments
 import io.github.kylemclean.scriptengine.interpreter.Interpreter.Companion.interpreter
 
-abstract class NativeFunctionValue(paramList: ParamList): FunctionValue(paramList) {
+abstract class NativeFunctionValue(paramList: ParamList) : FunctionValue(paramList) {
     final override fun execute() {
         interpreter.enterScope()
         interpreter.currentStackFrame!!.returnValue = executeNativeFunction(interpreter.currentStackFrame!!.arguments)

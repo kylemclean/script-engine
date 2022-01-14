@@ -2,7 +2,7 @@ package io.github.kylemclean.scriptengine.interpreter
 
 import io.github.kylemclean.scriptengine.interpreter.values.Value
 
-class Arguments(val values: List<Value>): Iterable<Value> {
+class Arguments(val values: List<Value>) : Iterable<Value> {
     operator fun get(index: Int): Value = values[index]
 
     fun requireSize(min: Int, max: Int = min) {

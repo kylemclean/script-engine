@@ -14,7 +14,8 @@ abstract class FunctionValue(val paramList: ParamList) : Value(functionClass) {
                     return when (val value = arguments[0]) {
                         is FunctionValue -> value
                         is StringValue ->
-                            io.github.kylemclean.scriptengine.CodeParser().parseFunctionExpression(value.string)!!.evaluate()
+                            io.github.kylemclean.scriptengine.CodeParser().parseFunctionExpression(value.string)!!
+                                .evaluate()
                         else -> throw IllegalArgumentException("code is not a StringValue")
                     }
                 }

@@ -32,7 +32,7 @@ abstract class Value(`class`: ClassValue?) {
         }
     }
 
-    class Property(private val getter: FunctionValue, private val setter: FunctionValue): Member {
+    class Property(private val getter: FunctionValue, private val setter: FunctionValue) : Member {
         override fun get(): Value = interpreter.call(getter, Arguments(emptyList()))
 
         override fun set(newValue: Value) {

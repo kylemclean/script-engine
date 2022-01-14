@@ -93,7 +93,8 @@ class RangeValue(private val start: Int, private val end: Int, private val step:
         return RangeValue(
             at(sliceStart.coerceIn(0, length() - 1))!!,
             at(sliceEnd.coerceIn(0, length() - 1))!!,
-            step * sliceStep)
+            step * sliceStep
+        )
     }
 
     override fun setSlice(slice: SliceValue, newValues: Value) {
@@ -104,7 +105,8 @@ class RangeValue(private val start: Int, private val end: Int, private val step:
         needle is IntegerValue
                 && (needle.value - start) % step == 0
                 && ((step > 0 && needle.value >= start && needle.value < end)
-                || (step < 0 && needle.value <= start && needle.value > end)))
+                || (step < 0 && needle.value <= start && needle.value > end))
+    )
 
     override fun str(): String = repr()
 

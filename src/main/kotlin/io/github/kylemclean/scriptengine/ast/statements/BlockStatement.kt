@@ -9,7 +9,8 @@ class BlockStatement(private val statements: List<Statement>) : Statement() {
             statement.execute()
             if (interpreter.currentStackFrame?.returnValue != null
                 || interpreter.shouldBreak
-                || interpreter.shouldContinue) {
+                || interpreter.shouldContinue
+            ) {
                 break
             }
         }

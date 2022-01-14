@@ -6,6 +6,8 @@ import io.github.kylemclean.scriptengine.interpreter.values.Value
 
 class ContainsExpression(private val needle: Expression, private val haystack: Expression) : Expression() {
     override fun evaluate(): Value =
-        interpreter.call(interpreter.containsFunction,
-            Arguments(listOf(needle.evaluate(), haystack.evaluate())))
+        interpreter.call(
+            interpreter.containsFunction,
+            Arguments(listOf(needle.evaluate(), haystack.evaluate()))
+        )
 }

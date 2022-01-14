@@ -8,7 +8,7 @@ import kotlin.math.floor
 import kotlin.math.pow
 
 abstract class ArithmeticBinaryOperatorExpression(lhsExpression: Expression, rhsExpression: Expression) :
-    BinaryOperatorExpression(lhsExpression, rhsExpression, ) {
+    BinaryOperatorExpression(lhsExpression, rhsExpression) {
     override fun evaluate(lhs: Value, rhs: Value): NumericValue {
         require(lhs is NumericValue) { "lhs is not a NumericValue" }
         require(rhs is NumericValue) { "rhs is not a NumericValue" }

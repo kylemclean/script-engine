@@ -18,7 +18,11 @@ fun main(args: Array<String>) {
         val terminalBuilder = TerminalBuilder.builder()
         val terminal = terminalBuilder.build()
         val commandParser = DefaultParser()
-        commandParser.setEofOnUnclosedBracket(DefaultParser.Bracket.CURLY, DefaultParser.Bracket.ROUND, DefaultParser.Bracket.SQUARE)
+        commandParser.setEofOnUnclosedBracket(
+            DefaultParser.Bracket.CURLY,
+            DefaultParser.Bracket.ROUND,
+            DefaultParser.Bracket.SQUARE
+        )
         commandParser.isEofOnUnclosedQuote = true
         commandParser.isEofOnEscapedNewLine = true
         val lineReader = LineReaderBuilder.builder()

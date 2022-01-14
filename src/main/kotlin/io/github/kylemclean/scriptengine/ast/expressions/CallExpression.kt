@@ -4,7 +4,8 @@ import io.github.kylemclean.scriptengine.interpreter.Arguments
 import io.github.kylemclean.scriptengine.interpreter.Interpreter.Companion.interpreter
 import io.github.kylemclean.scriptengine.interpreter.values.Value
 
-class CallExpression(private val functionExpression: Expression, private val arguments: List<Expression>) : Expression() {
+class CallExpression(private val functionExpression: Expression, private val arguments: List<Expression>) :
+    Expression() {
     override fun evaluate(): Value {
         val value = functionExpression.evaluate()
         val callee = value.callFunction
