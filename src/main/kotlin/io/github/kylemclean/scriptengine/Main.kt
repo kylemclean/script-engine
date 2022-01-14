@@ -12,7 +12,7 @@ import java.io.IOException
 import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
-    val parser = io.github.kylemclean.scriptengine.CodeParser()
+    val parser = CodeParser()
 
     if (args.isEmpty()) {
         val terminalBuilder = TerminalBuilder.builder()

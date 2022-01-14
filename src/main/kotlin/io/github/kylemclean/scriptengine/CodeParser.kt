@@ -14,26 +14,26 @@ class CodeParser {
 
     fun parseFile(fileName: String): Script {
         val input = CharStreams.fromFileName(fileName)
-        val lexer = io.github.kylemclean.scriptengine.ScriptEngineLexer(input)
+        val lexer = ScriptEngineLexer(input)
         val tokens = CommonTokenStream(lexer)
-        val parser = io.github.kylemclean.scriptengine.ScriptEngineParser(tokens)
+        val parser = ScriptEngineParser(tokens)
         val parseTree: ParseTree = parser.file()
         val rootNode = astBuilder.visit(parseTree)!!
         return Script(rootNode as BlockStatement)
     }
 
     fun parseStatement(statementCode: String): Statement? {
-        val lexer = io.github.kylemclean.scriptengine.ScriptEngineLexer(CharStreams.fromString(statementCode))
+        val lexer = ScriptEngineLexer(CharStreams.fromString(statementCode))
         val tokens = CommonTokenStream(lexer)
-        val parser = io.github.kylemclean.scriptengine.ScriptEngineParser(tokens)
+        val parser = ScriptEngineParser(tokens)
         val parseTree: ParseTree = parser.stmt()
         return astBuilder.visit(parseTree) as Statement?
     }
 
     fun parseFunctionExpression(functionExpressionCode: String): FunctionExpression? {
-        val lexer = io.github.kylemclean.scriptengine.ScriptEngineLexer(CharStreams.fromString(functionExpressionCode))
+        val lexer = ScriptEngineLexer(CharStreams.fromString(functionExpressionCode))
         val tokens = CommonTokenStream(lexer)
-        val parser = io.github.kylemclean.scriptengine.ScriptEngineParser(tokens)
+        val parser = ScriptEngineParser(tokens)
         val parseTree: ParseTree = parser.expr()
         return astBuilder.visit(parseTree) as FunctionExpression?
     }

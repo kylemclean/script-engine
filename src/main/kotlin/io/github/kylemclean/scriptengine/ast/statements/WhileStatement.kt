@@ -18,7 +18,7 @@ class WhileStatement(private val condition: Expression, private val body: BlockS
                 interpreter.shouldContinue = false
             } else if (interpreter.shouldBreak) {
                 interpreter.shouldBreak = false
-                break;
+                break
             }
         }
     }

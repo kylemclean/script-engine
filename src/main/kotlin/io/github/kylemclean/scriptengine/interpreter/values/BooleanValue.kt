@@ -15,9 +15,9 @@ abstract class BooleanValue private constructor(
                         throw IllegalArgumentException("wrong number of arguments")
                     return when (val value = arguments[0]) {
                         is BooleanValue -> value
-                        is SizedValue -> BooleanValue.of(value.length() > 0)
-                        is IntegerValue -> BooleanValue.of(value.value != 0)
-                        is FloatValue -> BooleanValue.of(value.value != 0F)
+                        is SizedValue -> of(value.length() > 0)
+                        is IntegerValue -> of(value.value != 0)
+                        is FloatValue -> of(value.value != 0F)
                         else -> throw IllegalArgumentException("value is not a BooleanValue, SizedValue, IntegerValue, or FloatValue")
                     }
                 }

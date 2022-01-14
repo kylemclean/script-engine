@@ -1,5 +1,6 @@
 package io.github.kylemclean.scriptengine.interpreter
 
+import io.github.kylemclean.scriptengine.CodeParser
 import io.github.kylemclean.scriptengine.ast.ParamList
 import io.github.kylemclean.scriptengine.ast.statements.Statement
 import io.github.kylemclean.scriptengine.interpreter.values.*
@@ -93,7 +94,7 @@ class Interpreter private constructor() {
         }
         globalScope.putSymbol(Symbol("reduce", reduceFunction))
 
-        val addFunction = io.github.kylemclean.scriptengine.CodeParser().parseFunctionExpression(
+        val addFunction = CodeParser().parseFunctionExpression(
             "(x, y) -> x + y"
         )!!.evaluate()
         sumFunction = object : NativeFunctionValue(ParamList("iterable")) {
@@ -107,10 +108,10 @@ class Interpreter private constructor() {
         }
         globalScope.putSymbol(Symbol("sum", sumFunction))
 
-        val minTwoFunction = io.github.kylemclean.scriptengine.CodeParser().parseFunctionExpression(
+        val minTwoFunction = CodeParser().parseFunctionExpression(
             "(x, y) -> if (x < y) x else y }"
         )!!.evaluate()
-        val maxTwoFunction = io.github.kylemclean.scriptengine.CodeParser().parseFunctionExpression(
+        val maxTwoFunction = CodeParser().parseFunctionExpression(
             "(x, y) -> if (x > y) x else y }"
         )!!.evaluate()
         val makeMinMaxFunctionValue: (FunctionValue) -> FunctionValue = { reducer: FunctionValue ->

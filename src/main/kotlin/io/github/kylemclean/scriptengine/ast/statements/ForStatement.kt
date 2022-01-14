@@ -19,7 +19,7 @@ class ForStatement(
                 interpreter.shouldContinue = false
             } else if (interpreter.shouldBreak) {
                 interpreter.shouldBreak = false
-                break;
+                break
             }
         }
     }
