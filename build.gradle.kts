@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.5.0"
+    kotlin("jvm") version "1.6.10"
     antlr
     application
 }
@@ -14,8 +14,8 @@ repositories {
 }
 
 dependencies {
-    antlr("org.antlr:antlr4:4.9")
-    implementation("org.jline:jline:3.20.0")
+    antlr("org.antlr:antlr4:4.9.3")
+    implementation("org.jline:jline:3.21.0")
 }
 
 tasks.withType<KotlinCompile>() {
