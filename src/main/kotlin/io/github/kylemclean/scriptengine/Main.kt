@@ -1,7 +1,6 @@
 package io.github.kylemclean.scriptengine
 
 import io.github.kylemclean.scriptengine.ast.statements.ExpressionStatement
-import io.github.kylemclean.scriptengine.interpreter.Interpreter
 import io.github.kylemclean.scriptengine.interpreter.Interpreter.Companion.interpreter
 import org.jline.reader.EndOfFileException
 import org.jline.reader.LineReader

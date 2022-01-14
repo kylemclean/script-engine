@@ -1,11 +1,9 @@
 package io.github.kylemclean.scriptengine.interpreter
 
-import io.github.kylemclean.scriptengine.CodeParser
 import io.github.kylemclean.scriptengine.ast.ParamList
 import io.github.kylemclean.scriptengine.ast.statements.Statement
-import io.github.kylemclean.scriptengine.interpreter.values.NativeFunctionValue
 import io.github.kylemclean.scriptengine.interpreter.values.*
-import java.util.Stack
+import java.util.*
 import kotlin.system.exitProcess
 
 class Interpreter private constructor() {

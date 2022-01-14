@@ -1,7 +1,6 @@
 package io.github.kylemclean.scriptengine.ast.expressions
 
 import io.github.kylemclean.scriptengine.interpreter.Interpreter.Companion.interpreter
-import io.github.kylemclean.scriptengine.interpreter.values.FunctionValue
 import io.github.kylemclean.scriptengine.interpreter.values.Value
 
 class CallExpression(private val functionExpression: Expression, private val arguments: List<Expression>) : Expression() {

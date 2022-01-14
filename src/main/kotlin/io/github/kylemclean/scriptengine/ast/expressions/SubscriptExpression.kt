@@ -1,6 +1,7 @@
 package io.github.kylemclean.scriptengine.ast.expressions
 
-import io.github.kylemclean.scriptengine.interpreter.values.*
+import io.github.kylemclean.scriptengine.interpreter.values.SubscriptableValue
+import io.github.kylemclean.scriptengine.interpreter.values.Value
 
 class SubscriptExpression(private val expression: Expression, private val subscriptExpression: Expression) :
     Expression(), AssignableExpression {

@@ -1,6 +1,5 @@
 package io.github.kylemclean.scriptengine.interpreter.values
 
-import io.github.kylemclean.scriptengine.CodeParser
 import io.github.kylemclean.scriptengine.ast.ParamList
 
 abstract class FunctionValue(val paramList: ParamList) : Value(functionClass) {

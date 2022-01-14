@@ -1,12 +1,8 @@
 package io.github.kylemclean.scriptengine.ast
 
-import io.github.kylemclean.scriptengine.ScriptEngineBaseVisitor
 import io.github.kylemclean.scriptengine.ScriptEngineParser.*
 import io.github.kylemclean.scriptengine.ast.expressions.*
 import io.github.kylemclean.scriptengine.ast.statements.*
-import io.github.kylemclean.scriptengine.ast.expressions.ArithmeticBinaryOperatorExpression
-import io.github.kylemclean.scriptengine.ast.expressions.BooleanLiteralExpression
-import io.github.kylemclean.scriptengine.ast.expressions.NullLiteralExpression
 
 class ASTBuilder : io.github.kylemclean.scriptengine.ScriptEngineBaseVisitor<Any>() {
     override fun visitFile(ctx: FileContext) = BlockStatement(ctx.stmt().map { visitStmt(it)!! })
